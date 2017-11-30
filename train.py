@@ -10,9 +10,9 @@ warnings.filterwarnings('ignore')
 os.environ.setdefault('CUDA_VISIBLE_DEVICES', '2')
 
 # Parameters
-epochs_count = 10
-dataset_folder = './data/average_dataset/'
-model_weights_file = 'model.trch'
+epochs_count = 20
+dataset_folder = './data/reviews_Electronics_5/'
+model_weights_file = 'model_electronics.trch'
 
 
 # Loading the dataset
