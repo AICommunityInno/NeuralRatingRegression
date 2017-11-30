@@ -1,5 +1,5 @@
 from constants import TEST_SPLIT, TRAIN_SPLIT
-from os.path import splitext,join
+from os.path import splitext, join
 from os import makedirs
 
 def split(json_paths, verbose=True):
@@ -19,8 +19,8 @@ def split(json_paths, verbose=True):
             for line in f:
                 data.append(line)
         train_json_path = join(splitext(json_path)[0], 'train.json')
-        test_json_path = join(splitext(json_path)[0],'test.json')
-        val_json_path = join(splitext(json_path)[0],'val.json')
+        test_json_path = join(splitext(json_path)[0], 'test.json')
+        val_json_path = join(splitext(json_path)[0], 'val.json')
         makedirs(splitext(json_path)[0], exist_ok=True)
  
         with open(train_json_path,'w') as f:
@@ -32,7 +32,7 @@ def split(json_paths, verbose=True):
         if verbose:
             print(train_json_path + ' written')
         
-        with open(test_json_path,'w') as f:
+        with open(test_json_path, 'w') as f:
             f.writelines(
                 data[
                     int(TRAIN_SPLIT * len(data)) : int((TRAIN_SPLIT + TEST_SPLIT) * len(data))
@@ -41,7 +41,7 @@ def split(json_paths, verbose=True):
         if verbose:
             print(test_json_path + ' written')
         
-        with open(val_json_path,'w') as f:
+        with open(val_json_path, 'w') as f:
             f.writelines(
                 data[
                     int((TRAIN_SPLIT + TEST_SPLIT) * len(data)): 
