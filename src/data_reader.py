@@ -22,12 +22,15 @@ def __review_postprocessing(review, vocab, _):
     return freq_arr.T
 
 
-def amazon_dataset_iters(parent_path, device, batch_sizes=(32, 256, 256), verbose=True):
+def amazon_dataset_iters(parent_path, device, batch_sizes=(32, 256, 256),
+                         minimum_frequency=MIN_FREQ,
+                         verbose=True):
     """
         Arguments:
         parent_path: path to folder with train.json, val.json and test.json in Amazon format
         device: device to allocate batches on
         batch_sizes: tuple of (train_batch_size, val_batch_size, test_batch_size)
+        minimum_frequency: minimum frequency of words in batches (parameter of data.Field.build_vocab)
         verbose: True will print current status of processing
         
         Returns:
@@ -77,10 +80,10 @@ def amazon_dataset_iters(parent_path, device, batch_sizes=(32, 256, 256), verbos
     user.build_vocab(train)
     if verbose:
         print('user vocab built')
-    text.build_vocab(train.text, train.tips, min_freq=MIN_FREQ)
+    text.build_vocab(train.text, train.tips, min_freq=minimum_frequency)
     if verbose:
         print('text vocab built')
-    tips.build_vocab(train.text, train.tips, min_freq=MIN_FREQ)
+    tips.build_vocab(train.text, train.tips, min_freq=minimum_frequency)
     if verbose:
         print('tips vocab built')
     train_iter, val_iter, test_iter = data.Iterator.splits(

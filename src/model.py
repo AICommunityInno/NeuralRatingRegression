@@ -19,11 +19,10 @@ class Merger(nn.Module):
     def __init__(self, hidden_size, user_latent_factors_count, item_latent_factors_count):
         super(Merger, self).__init__()
         self.user_model = nn.Linear(user_latent_factors_count, hidden_size, bias=False)
-        self.item_model = nn.Linear(item_latent_factors_count, hidden_size, bias=False)
-        self.bias = nn.Parameter(torch.Tensor(1))
+        self.item_model = nn.Linear(item_latent_factors_count, hidden_size, bias=True)
 
     def forward(self, user_embed, item_embed):
-        return nn.Sigmoid()(self.user_model(user_embed) + self.item_model(item_embed) + self.bias)
+        return nn.Sigmoid()(self.user_model(user_embed) + self.item_model(item_embed))
 
 
 class ContextMerger(nn.Module):
@@ -33,14 +32,13 @@ class ContextMerger(nn.Module):
         super(ContextMerger, self).__init__()
         self.user_model = nn.Linear(user_latent_factors_count, context_size, bias=False)
         self.item_model = nn.Linear(item_latent_factors_count, context_size, bias=False)
-        self.rating_weight = nn.Parameter(torch.Tensor(1))
-        self.review_model = nn.Linear(vocabulary_size, context_size, bias=False)
-        self.bias = nn.Parameter(torch.Tensor(1))
+        self.rating_weight = nn.Parameter(device.FloatTensor(1))
+        self.review_model = nn.Linear(vocabulary_size, context_size, bias=True)
 
     def forward(self, user_embed, item_embed, rating, review):
         return nn.Tanh()(
             self.user_model(user_embed) + self.item_model(item_embed) +
-            self.rating_weight * rating + self.review_model(review) + self.bias
+            self.rating_weight * rating + self.review_model(review)
         )
 
 
@@ -121,7 +119,7 @@ class Model(nn.Module):
                  hidden_size=HIDDEN_DIM,
                  n_regression_layers=RR_HIDDEN_LAYERS,
                  n_review_layers=TG_HIDDEN_LAYERS,
-                 max_tip_len=MAX_LENGTH):
+                 max_tip_len=MAX_LENGTH + 2):
         super(Model, self).__init__()
         self.SEQ_START_ID = 2
         self.encoder = EncoderModel(users_count=users_count,

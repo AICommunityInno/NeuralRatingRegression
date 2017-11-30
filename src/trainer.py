@@ -35,7 +35,6 @@ class Trainer(object):
                 tips_batch = torch.transpose(batch.tips, 0, 1)
 
                 regression_result, review_softmax, tips_output = self.model.forward(users_batch, items_batch)
-                self.optimizer.zero_grad()
 
                 loss = self.loss_criterion(ratings_batch, regression_result,
                                            reviews_batch, review_softmax,
@@ -43,7 +42,9 @@ class Trainer(object):
                                            tips_output.contiguous().view(-1, self.model.voc_size()))
                 losses.append(loss.data.cpu().numpy())
 
+                self.optimizer.zero_grad()
                 loss.backward()
+
                 self.optimizer.step()
 
                 gc.collect()
