@@ -25,15 +25,16 @@ def __review_postprocessing(review, vocab, _):
 def amazon_dataset_iters(parent_path, device, batch_sizes=(32, 256, 256),
                          minimum_frequency=MIN_FREQ,
                          verbose=True):
-    """
-        Arguments:
+    """Helper function for creating batch iterators over Amazon Reviews datasets.
+
+    Arguments:
         parent_path: path to folder with train.json, val.json and test.json in Amazon format
         device: device to allocate batches on
         batch_sizes: tuple of (train_batch_size, val_batch_size, test_batch_size)
         minimum_frequency: minimum frequency of words in batches (parameter of data.Field.build_vocab)
         verbose: True will print current status of processing
         
-        Returns:
+    Returns:
         (vocab, train_iter, val_iter, test_iter) - vocab and batch iterators for train, validation and test data.
         Each batch contains the following fields:
         batch.item - torch.LongTensor of shape (batch_size,) - numbers of reviewed items

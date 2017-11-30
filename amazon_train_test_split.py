@@ -5,15 +5,14 @@ from src.constants import TEST_SPLIT, TRAIN_SPLIT
 
 
 def split(json_paths, verbose=True):
-    """
-        Splits amazon datasets into train.json, val.json and test.json in separate folder
-        according to split rates defined in constants.py
+    """Splits amazon datasets into train.json, val.json and test.json in separate folder
+    according to split rates defined in constants.py
 
-        Arguments:
+    Arguments:
         json_paths: list of strings - paths to dataset jsons
-        verbose: True will print current status of processing
+        verbose: bool — prints current status of processing is True
 
-        Returns:
+    Returns:
         None
     """
     for json_path in json_paths:

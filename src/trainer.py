@@ -10,10 +10,12 @@ from .constants import REG_WEIGHT
 
 
 class Trainer(object):
+    """Class, which implements the training algorithm for the model."""
 
     def __init__(self, model):
         self.model = model
 
+        # loss of the model
         self.loss_criterion = (
             lambda r, r_hat, c, c_hat, s, s_hat:
             nn.MSELoss()(r_hat, r) + review_loss(c_hat, c) + nn.NLLLoss()(s_hat, s)
@@ -22,6 +24,13 @@ class Trainer(object):
                                         weight_decay=REG_WEIGHT)  # L2 regularisation is included here
 
     def train(self, train_iter, n_epochs):
+        """Trains the model.
+            Arguments:
+               train_iter: iterator — batch iterator over the training set
+               n_epochs: int — number of epochs for training
+            Returns:
+                losses: list of float — history of losses after each epochs
+        """
         losses = []
 
         for epoch_i in range(n_epochs):
